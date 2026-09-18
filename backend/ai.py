@@ -24,7 +24,12 @@ def question_to_sql(question: str) -> str:
     """Спросить LLM и получить SQL-запрос."""
     # ключ берётся из ANTHROPIC_API_KEY в .env; адрес API задаём явно,
     # чтобы не подхватить чужой ANTHROPIC_BASE_URL из окружения
-    client = anthropic.Anthropic(base_url="https://api.anthropic.com")
+    # ANTHROPIC_WORKSPACE_ID нужен только для ключа, не привязанного к workspace
+    workspace_id = os.getenv("ANTHROPIC_WORKSPACE_ID")
+    client = anthropic.Anthropic(
+        base_url="https://api.anthropic.com",
+        default_headers={"anthropic-workspace-id": workspace_id} if workspace_id else None,
+    )
     response = client.beta.messages.create(
         model=MODEL,
         max_tokens=2000,
