@@ -22,7 +22,9 @@ SYSTEM_PROMPT = f"""Ты помощник в ERP-системе. Перевод�
 
 def question_to_sql(question: str) -> str:
     """Спросить LLM и получить SQL-запрос."""
-    client = anthropic.Anthropic()  # ключ берётся из ANTHROPIC_API_KEY в .env
+    # ключ берётся из ANTHROPIC_API_KEY в .env; адрес API задаём явно,
+    # чтобы не подхватить чужой ANTHROPIC_BASE_URL из окружения
+    client = anthropic.Anthropic(base_url="https://api.anthropic.com")
     response = client.beta.messages.create(
         model=MODEL,
         max_tokens=2000,

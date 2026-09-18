@@ -1,11 +1,14 @@
 """REST API мини-ERP. Запуск: uvicorn main:app --reload"""
+from pathlib import Path
+
 import anthropic
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-load_dotenv()  # читаем backend/.env (там ANTHROPIC_API_KEY)
+# читаем backend/.env (там ANTHROPIC_API_KEY) — путь явный, чтобы работало из любой папки
+load_dotenv(Path(__file__).parent / ".env")
 
 import ai  # noqa: E402
 from db import get_conn, init_db  # noqa: E402
